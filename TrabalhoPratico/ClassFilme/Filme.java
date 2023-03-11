@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.text.DateFormat;
 import java.util.Date;
 
 public class Filme {
@@ -159,16 +160,14 @@ public class Filme {
     }
 
     public String toString() {
+        DateFormat formatData = DateFormat.getDateInstance(DateFormat.SHORT);
+        
         String str = "id= " + this.id + '\n'
                 + "title= " + this.titulo + '\n'
                 + "type= " + this.type + '\n'
-                + "Date= " + this.data + '\n'
+                + "Date= " + formatData.format(this.data) + '\n'
                 + "Directors= " + arrayToString(this.diretor) + '\n';
         return str;
-
-    }
-
-    public static void main(String[] args) {
 
     }
 }

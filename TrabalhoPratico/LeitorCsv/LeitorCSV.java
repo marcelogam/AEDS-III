@@ -14,7 +14,7 @@ public class LeitorCSV {
      * Este metodo tem a finalidade de pegar uma string que foi
      * do csv e tranformar em varios atributos.
      */
-    public static Filme tratarLinha(String str) throws Exception {
+    private static Filme tratarLinha(String str) throws Exception {
         int i = 0;
         String atributos[] = new String[12];
         int j = 0;
@@ -59,7 +59,7 @@ public class LeitorCSV {
         return criarFilme(atributos);
     }
 
-    public static Filme criarFilme(String atributos[]) throws Exception {
+    private static Filme criarFilme(String atributos[]) throws Exception {
 
         Filme filme = new Filme(converterStringParaInt(atributos[0]), // ID
                 atributos[2], // title
@@ -70,7 +70,7 @@ public class LeitorCSV {
         return filme;
     }
 
-    public static String[] converterStringParaVetor(String linha) {
+    private static String[] converterStringParaVetor(String linha) {
         String[] diretores;
         if (linha != null) {
             int j = 0;
@@ -89,7 +89,7 @@ public class LeitorCSV {
         return diretores;
     }
 
-    public static Date tranformarData(String str) throws Exception {
+    private static Date tranformarData(String str) throws Exception {
         Date data;
         if (str != null) {
             String temp = "";
@@ -124,7 +124,7 @@ public class LeitorCSV {
         return data;
     }
 
-    public static int converterStringParaInt(String str) {
+    private static int converterStringParaInt(String str) {
         int tamanho = str.length();
         String novo = "";
         for (int i = 1; i < tamanho; i++) {
@@ -134,7 +134,7 @@ public class LeitorCSV {
         return valor;
     }
 
-    public static void lerBancoDeDados(RandomAccessFile arq) throws Exception {
+    private static void lerBancoDeDados(RandomAccessFile arq) throws Exception {
         arq.seek(0);
         int quantidade = arq.readInt();
         System.out.println(quantidade);
