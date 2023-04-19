@@ -340,10 +340,12 @@ public class Crud {
                             "Opcao 2: Read na Tabela Hash\n"));
                     switch (opcaoRead) {
                         case 0:
-                            Filme filme0 = read(
-                                    Integer.parseInt(JOptionPane.showInputDialog("Digite um id para a busca")));
+                            long startTime0 = System.currentTimeMillis();
+                            Filme filme0 = read(Integer.parseInt(JOptionPane.showInputDialog("Digite um id para a busca")));
+                            long endTime0 = System.currentTimeMillis();
+                            long time0 = endTime0 - startTime0;
                             if (filme0 != null) {
-                                JOptionPane.showMessageDialog(null, "Filme econtrado:\n" + filme0.toString(), "Sucesso",
+                                JOptionPane.showMessageDialog(null, "Filme econtrado:\n" + filme0.toString() + "Tempo para achar o filme= " + time0 + "ms" , "Sucesso",
                                         JOptionPane.INFORMATION_MESSAGE);
                             } else {
                                 JOptionPane.showMessageDialog(null, "Filme nao econtrado", "Atencao",
@@ -351,10 +353,12 @@ public class Crud {
                             }
                             break;
                         case 1:
-                            Filme filme1 = readArvore(
-                                    Integer.parseInt(JOptionPane.showInputDialog("Digite um id para a busca")), arvore);
+                            long startTime1 = System.currentTimeMillis();
+                            Filme filme1 = readArvore(Integer.parseInt(JOptionPane.showInputDialog("Digite um id para a busca")), arvore);
+                            long endTime1 = System.currentTimeMillis();
+                            long time1 = endTime1 - startTime1;
                             if (filme1 != null) {
-                                JOptionPane.showMessageDialog(null, "Filme econtrado:\n" + filme1.toString(), "Sucesso",
+                                JOptionPane.showMessageDialog(null, "Filme econtrado:\n" + filme1.toString() + "Tempo para achar o filme= " + time1 + "ms", "Sucesso",
                                         JOptionPane.INFORMATION_MESSAGE);
                             } else {
                                 JOptionPane.showMessageDialog(null, "Filme nao econtrado", "Atencao",
@@ -362,11 +366,12 @@ public class Crud {
                             }
                             break;
                         case 2:
-                            Filme filme2 = readHash(
-                                    Integer.parseInt(JOptionPane.showInputDialog("Digite um id para a busca")),
-                                    indexHash);
+                            long startTime2 = System.currentTimeMillis();
+                            Filme filme2 = readHash(Integer.parseInt(JOptionPane.showInputDialog("Digite um id para a busca")),indexHash);
+                            long endTime2 = System.currentTimeMillis();
+                            long time2 = endTime2 - startTime2;
                             if (filme2 != null) {
-                                JOptionPane.showMessageDialog(null, "Filme econtrado:\n" + filme2.toString(), "Sucesso",
+                                JOptionPane.showMessageDialog(null, "Filme econtrado:\n" + filme2.toString() + "Tempo para achar o filme= " + time2 + "ms", "Sucesso",
                                         JOptionPane.INFORMATION_MESSAGE);
                             } else {
                                 JOptionPane.showMessageDialog(null, "Filme nao econtrado", "Atencao",
