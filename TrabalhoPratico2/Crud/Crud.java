@@ -8,7 +8,7 @@ import javax.swing.JOptionPane;
 
 import Arvore.ArvoreBMais_String_Int;
 import ClassFilme.Filme;
-import HashDinamico.HashEstensivel;
+import HashDinamico.HashExtensivel;
 
 public class Crud {
     private static RandomAccessFile arq = null;
@@ -115,7 +115,7 @@ public class Crud {
         return filme;
     }
 
-    private static void create(Filme filme, ArvoreBMais_String_Int indexArv, HashEstensivel hash) throws Exception {
+    private static void create(Filme filme, ArvoreBMais_String_Int indexArv, HashExtensivel hash) throws Exception {
         // Mover ponteiro para o inicio do arquivo
         arq.seek(0);
         // Ler o ultimo Id
@@ -194,7 +194,7 @@ public class Crud {
         return filme;
     }
 
-    private static Filme readHash(int id, HashEstensivel hash) throws Exception {
+    private static Filme readHash(int id, HashExtensivel hash) throws Exception {
         // Cria um filme vazio
         Filme filme = null;
         // Pega a posicao no arquivo do id passado como parametro
@@ -281,7 +281,7 @@ public class Crud {
 
     /*
      * private static boolean delete(int id, ArvoreBMais_String_Int arvore,
-     * HashEstensivel hash) throws Exception {
+     * HashExtensivel hash) throws Exception {
      * int tamReg = 0;
      * // Mover o ponteiro para o primeiro registro(apos o cabecalho)
      * arq.seek(4);
@@ -311,7 +311,7 @@ public class Crud {
      * return false;
      * }
      */
-    private static boolean delete(int id, ArvoreBMais_String_Int arvore, HashEstensivel hash) throws Exception {
+    private static boolean delete(int id, ArvoreBMais_String_Int arvore, HashExtensivel hash) throws Exception {
         // Variavel para saber o tamanho do registro
         int tamReg;
         // Descobrir a posicao no arquivo do id passado como parametro
@@ -343,7 +343,7 @@ public class Crud {
         return false;
     }
 
-    public static void iniciarCrud(ArvoreBMais_String_Int arvore, HashEstensivel indexHash) throws Exception {
+    public static void iniciarCrud(ArvoreBMais_String_Int arvore, HashExtensivel indexHash) throws Exception {
         arq = new RandomAccessFile("BancoDeDados/Filmes.db", "rw");
         int opcao = 0;
         do {

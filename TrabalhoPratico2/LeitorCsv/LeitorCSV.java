@@ -9,7 +9,7 @@ import java.util.Locale;
 
 import ClassFilme.Filme;
 import Arvore.ArvoreBMais_String_Int;
-import HashDinamico.HashEstensivel;
+import HashDinamico.HashExtensivel;
 
 public class LeitorCSV {
     /*
@@ -156,7 +156,7 @@ public class LeitorCSV {
 
     }
 
-    public static void inciarBD(ArvoreBMais_String_Int arvore, HashEstensivel indexHash) throws Exception {
+    public static void inciarBD(ArvoreBMais_String_Int arvore, HashExtensivel indexHash) throws Exception {
         // String para temporario para ler do arquivo CSV
         String linha = "";
         // Inteiro para controlar o array de filmes

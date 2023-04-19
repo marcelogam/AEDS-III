@@ -3,7 +3,7 @@ import java.io.File;
 import Crud.Crud;
 import LeitorCsv.LeitorCSV;
 import Arvore.ArvoreBMais_String_Int;
-import HashDinamico.HashEstensivel;
+import HashDinamico.HashExtensivel;
 
 import javax.swing.JOptionPane;
 
@@ -13,8 +13,9 @@ public class Main {
     public static void main(String[] args) throws Exception {
         //Criacao da arvore
         ArvoreBMais_String_Int arvore = new ArvoreBMais_String_Int(8, "BancoDeDados/indexArvore");
+        
         //Criacao da Tabelahash
-        HashEstensivel indexHash = new HashEstensivel(2000, "BancoDeDados/diretorio.db", "BancoDeDados/indexTabelaHash.db");
+        HashExtensivel indexHash = new HashExtensivel(2000, "BancoDeDados/diretorio.db", "BancoDeDados/indexTabelaHash.db");
 
         // Sempre reiniciar arquivo
         File arq = new File("BancoDeDados/filmes.db");
