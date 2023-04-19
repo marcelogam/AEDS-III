@@ -221,96 +221,67 @@ public class Crud {
         return filme;
     }
 
-    private static boolean update(Filme novo) throws Exception {
-        int tamRegistro = 0;
-        // posicionar o ponteiro no comeco do arquivo depois do cabecalho
-        arq.seek(4); // 1 int
+    private static boolean update(Filme novo, ArvoreBMais_String_Int arvore, HashExtensivel hash) throws Exception {
+        // Descobrir a posicao que o id do filme atualizado se encontra no arquivo
+        long posFilme = arvore.read(String.valueOf(novo.getId()));
 
-        // enquanto nao atingir o fim do arquivo // tamRegistro + 5 -> tamanho do
-        // registro + 1 booleano (lapide) + 1 int (tamanho)
-        for (long i = 4; i < arq.length(); i += tamRegistro + 5) {
+        // Posicionar ponteiro no endereco do filme
+        arq.seek(posFilme);
 
-            // salvar a posicao inicial
-            long posInicial = arq.getFilePointer();
+        // leitura da lapide
+        boolean lapide = arq.readBoolean();
 
-            // leitura da lapide
-            boolean lapide = arq.readBoolean();
+        // Variavel para descobrir o tamanho do registro
+        int tamRegistro;
 
-            // leitura do tamanho
-            tamRegistro = arq.readInt();
+        // leitura do tamanho
+        tamRegistro = arq.readInt();
 
-            // criacao do filme pelo byte array
-            byte[] ba = new byte[tamRegistro];
-            arq.read(ba);
-            Filme filme = new Filme(ba);
+        // criacao do filme pelo byte array
+        byte[] ba = new byte[tamRegistro];
+        arq.read(ba);
+        Filme filme = new Filme(ba);
+        if (!lapide)
 
-            // se nao tiver lapide
-            if (!lapide)
+            // se o filme tiver o mesmo id do novo filme
+            if (filme.getId() == novo.getId()) {
 
-                // se o filme tiver o mesmo id do novo filme
-                if (filme.getId() == novo.getId()) {
+                // criacao de novo registro
+                byte[] baNovo = novo.toByteArray();
 
-                    // criacao de novo registro
-                    byte[] baNovo = novo.toByteArray();
+                // se o tamanho do novo registro for igual ao antigo
+                if (baNovo.length <= tamRegistro) {
+                    // reescrever filme na posicao
+                    arq.seek(posFilme + 5);
+                    arq.write(baNovo);
+                    return true;
+                } else {
+                    // atualizar lapide
+                    arq.seek(posFilme);
+                    arq.writeBoolean(true);
 
-                    // se o tamanho do novo registro for igual ao antigo
-                    if (baNovo.length <= tamRegistro) {
-                        // reescrever filme na posicao
-                        arq.seek(posInicial + 5);
-                        arq.write(baNovo);
-                        return true;
-                    } else {
-                        // atualizar lapide
-                        arq.seek(posInicial);
-                        arq.writeBoolean(true);
-                        // create sem atualizar o id
-                        // mover o ponteiro para o fim do arquivo
-                        arq.seek(arq.length());
-                        // escrever lapide
-                        arq.writeBoolean(false);
-                        // escrever tamanho do byte
-                        arq.writeInt(novo.toByteArray().length);
-                        // escrever registro
-                        arq.write(novo.toByteArray());
-                        return true;
-                    } // end if
+                    // create sem atualizar o id
+                    // mover o ponteiro para o fim do arquivo
+                    arq.seek(arq.length());
+
+                    //Editar na arvore
+                    arvore.update(Integer.toString(filme.getId()), Long.valueOf(arq.length()).intValue());
+                    //Edita na tabela hash
+                    hash.update(filme.getId(), arq.length());
+
+                    // escrever lapide
+                    arq.writeBoolean(false);
+                    // escrever tamanho do byte
+                    arq.writeInt(novo.toByteArray().length);
+                    // escrever registro
+                    arq.write(novo.toByteArray());
+                    return true;
                 } // end if
-        } // end for
+            } // end if
+
         return false;
     } // end update ()
 
-    /*
-     * private static boolean delete(int id, ArvoreBMais_String_Int arvore,
-     * HashExtensivel hash) throws Exception {
-     * int tamReg = 0;
-     * // Mover o ponteiro para o primeiro registro(apos o cabecalho)
-     * arq.seek(4);
-     * // Ler ate atingir o fim do arquivo
-     * for (long i = 4; i < arq.length(); i += tamReg + 5) {
-     * // Guardar posicao incial
-     * long pos = arq.getFilePointer();
-     * // Ler proximo registro
-     * boolean lapide = arq.readBoolean();
-     * tamReg = arq.readInt();
-     * // Extrair filme
-     * byte reg[] = new byte[tamReg];
-     * arq.read(reg);
-     * Filme filme = new Filme(reg);
-     * // Se lapide for falsa
-     * if (!(lapide)) {
-     * // Se o id do filme for igual ao id passado como parametro
-     * if (filme.getId() == id) {
-     * // Mover ponteiro para posicao
-     * arq.seek(pos);
-     * // Escrever lapide como excluida
-     * arq.writeBoolean(true);
-     * return true;
-     * }
-     * }
-     * }
-     * return false;
-     * }
-     */
     private static boolean delete(int id, ArvoreBMais_String_Int arvore, HashExtensivel hash) throws Exception {
         // Variavel para saber o tamanho do registro
         int tamReg;
@@ -408,7 +379,7 @@ public class Crud {
                     opcao = -1;
                     break;
                 case 3:
-                    if (update(atualizarFilme())) {
+                    if (update(atualizarFilme(), arvore, indexHash)) {
                         JOptionPane.showMessageDialog(null, "Filme atualizado", "Sucesso",
                                 JOptionPane.INFORMATION_MESSAGE);
                     } else {
