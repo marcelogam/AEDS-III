@@ -9,6 +9,9 @@ import javax.swing.JOptionPane;
 import Arvore.ArvoreB;
 import ClassFilme.Filme;
 import HashDinamico.HashExtensivel;
+import Compactacao.IniciarCompac;
+import Compactacao.LZW;
+
 
 public class Crud {
     private static RandomAccessFile arq = null;
@@ -264,9 +267,9 @@ public class Crud {
                     // mover o ponteiro para o fim do arquivo
                     arq.seek(arq.length());
 
-                    // Editar na arvore
+                    //Editar na arvore
                     arvore.update(Integer.toString(filme.getId()), Long.valueOf(arq.length()).intValue());
-                    // Edita na tabela hash
+                    //Edita na tabela hash
                     hash.update(filme.getId(), arq.length());
 
                     // escrever lapide
@@ -324,7 +327,8 @@ public class Crud {
                     "Opcao 1: Create\n" +
                     "Opcao 2: Read\n" +
                     "Opcao 3: Update\n" +
-                    "Opcao 4: Delete\n"));
+                    "Opcao 4: Delete\n" +
+                    "Opcao 5: Compactar"));
             switch (opcao) {
                 case 0:
                     break;
@@ -341,15 +345,11 @@ public class Crud {
                     switch (opcaoRead) {
                         case 0:
                             long startTime0 = System.currentTimeMillis();
-                            Filme filme0 = read(
-                                    Integer.parseInt(JOptionPane.showInputDialog("Digite um id para a busca")));
+                            Filme filme0 = read(Integer.parseInt(JOptionPane.showInputDialog("Digite um id para a busca")));
                             long endTime0 = System.currentTimeMillis();
                             long time0 = endTime0 - startTime0;
                             if (filme0 != null) {
-                                JOptionPane.showMessageDialog(null,
-                                        "Filme econtrado:\n" + filme0.toString() + "Tempo para achar o filme= " + time0
-                                                + "ms",
-                                        "Sucesso",
+                                JOptionPane.showMessageDialog(null, "Filme econtrado:\n" + filme0.toString() + "Tempo para achar o filme= " + time0 + "ms" , "Sucesso",
                                         JOptionPane.INFORMATION_MESSAGE);
                             } else {
                                 JOptionPane.showMessageDialog(null, "Filme nao econtrado", "Atencao",
@@ -358,15 +358,11 @@ public class Crud {
                             break;
                         case 1:
                             long startTime1 = System.currentTimeMillis();
-                            Filme filme1 = readArvore(
-                                    Integer.parseInt(JOptionPane.showInputDialog("Digite um id para a busca")), arvore);
+                            Filme filme1 = readArvore(Integer.parseInt(JOptionPane.showInputDialog("Digite um id para a busca")), arvore);
                             long endTime1 = System.currentTimeMillis();
                             long time1 = endTime1 - startTime1;
                             if (filme1 != null) {
-                                JOptionPane.showMessageDialog(null,
-                                        "Filme econtrado:\n" + filme1.toString() + "Tempo para achar o filme= " + time1
-                                                + "ms",
-                                        "Sucesso",
+                                JOptionPane.showMessageDialog(null, "Filme econtrado:\n" + filme1.toString() + "Tempo para achar o filme= " + time1 + "ms", "Sucesso",
                                         JOptionPane.INFORMATION_MESSAGE);
                             } else {
                                 JOptionPane.showMessageDialog(null, "Filme nao econtrado", "Atencao",
@@ -375,16 +371,11 @@ public class Crud {
                             break;
                         case 2:
                             long startTime2 = System.currentTimeMillis();
-                            Filme filme2 = readHash(
-                                    Integer.parseInt(JOptionPane.showInputDialog("Digite um id para a busca")),
-                                    indexHash);
+                            Filme filme2 = readHash(Integer.parseInt(JOptionPane.showInputDialog("Digite um id para a busca")),indexHash);
                             long endTime2 = System.currentTimeMillis();
                             long time2 = endTime2 - startTime2;
                             if (filme2 != null) {
-                                JOptionPane.showMessageDialog(null,
-                                        "Filme econtrado:\n" + filme2.toString() + "Tempo para achar o filme= " + time2
-                                                + "ms",
-                                        "Sucesso",
+                                JOptionPane.showMessageDialog(null, "Filme econtrado:\n" + filme2.toString() + "Tempo para achar o filme= " + time2 + "ms", "Sucesso",
                                         JOptionPane.INFORMATION_MESSAGE);
                             } else {
                                 JOptionPane.showMessageDialog(null, "Filme nao econtrado", "Atencao",
@@ -413,6 +404,54 @@ public class Crud {
                                 JOptionPane.INFORMATION_MESSAGE);
                     } else {
                         JOptionPane.showMessageDialog(null, "Filme nao deletado", "Atencao", JOptionPane.ERROR_MESSAGE);
+                    }
+                    opcao = -1;
+                    break;
+                case 5:
+                    int opcaoCompactacao = Integer.parseInt(JOptionPane.showInputDialog("           Menu Inicial \n" +
+                    "Digite a opcao desejada:\n" +
+                    "Opcao 0: Huffman\n" +
+                    "Opcao 1: Compactar usando LZW\n" +
+                    "Opcao 2: Descompactar usando LZW\n" +
+                    "Opcao 3: Verificar a compactacao\n"));
+                    switch (opcaoCompactacao) {
+
+                        case 0:
+                            long compac, descompac;
+                            long startTime0 = System.currentTimeMillis();
+                            compac = IniciarCompac.main("BancoDeDados/Filmes.db");
+                            long endTime0 = System.currentTimeMillis();
+                            descompac = (endTime0 - startTime0) - compac;
+                            JOptionPane.showMessageDialog(null,"HUFFMAN\n" + "Tempo para compactacao: " + compac + "\nTempo para descompactacao: " + descompac , "Tempo",
+                            JOptionPane.INFORMATION_MESSAGE);
+                            break;
+                        case 1:
+                            long startTime1 = System.currentTimeMillis();
+                            LZW.compress("BancoDeDados/Filmes.db", "BancoDeDados/compress.db");
+                            long endTime1 = System.currentTimeMillis();
+                            long time1 = endTime1 - startTime1;
+                            JOptionPane.showMessageDialog(null, "LZW\n" + "Tempo para compactacao: " + time1, "Tempo",
+                            JOptionPane.INFORMATION_MESSAGE);
+                            break;
+                        case 2:
+                            long startTime2 = System.currentTimeMillis();
+                            LZW.decompress("BancoDeDados/compress.db", "BancoDeDados/decompress.db");
+                            long endTime2 = System.currentTimeMillis();
+                            long time2 = endTime2 - startTime2;
+                            JOptionPane.showMessageDialog(null, "LZW\n" + "Tempo para descompactacao: " + time2, "Tempo",
+                            JOptionPane.INFORMATION_MESSAGE);
+                            break;
+                        case 3:
+                            RandomAccessFile arqOriginal = new RandomAccessFile("BancoDeDados/Filmes.db", "rw");
+                            RandomAccessFile arqCompacHuf = new RandomAccessFile("BancoDeDados/compress.db", "rw");
+                            RandomAccessFile arqDescomHuf = new RandomAccessFile("BancoDeDados/descompress.db", "rw");
+                            RandomAccessFile arqCompacLZW = new RandomAccessFile("BancoDeDados/h_compressed.bin", "rw");
+                            RandomAccessFile arqDescomLZW = new RandomAccessFile("BancoDeDados/h_descompressed.bin", "rw");
+                            JOptionPane.showMessageDialog(null, "Tamannho dos arquivos \n Arquivo original: " + arqOriginal.length() + "\nArquivo compactado por Huffman: " + arqCompacHuf.length() + "\nArquivo descompactado por Huffman: " + arqDescomHuf.length() + "\nArquivo compactado por LZW: " + arqCompacLZW.length() + "\nArquivo descompactado por LZW: " + arqDescomLZW.length() , "Verificação",
+                                        JOptionPane.INFORMATION_MESSAGE);
+                            break;                            
+                        default:
+                            break;
                     }
                     opcao = -1;
                     break;

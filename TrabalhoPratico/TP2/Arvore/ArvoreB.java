@@ -28,7 +28,7 @@ import java.io.RandomAccessFile;
 // CHAVE: String  (usado para algum atributo textual da entidade como Nome, Título, ...)
 // VALOR: Int     (usado para o identificador dessa entidade)
 
-public class ArvoreBMais_String_Int {
+public class ArvoreB {
 
     private int  ordem;                 // Número máximo de filhos que uma página pode conter
     private int  maxElementos;          // Variável igual a ordem - 1 para facilitar a clareza do código
@@ -167,7 +167,7 @@ public class ArvoreBMais_String_Int {
     // ------------------------------------------------------------------------------
         
     
-    public ArvoreBMais_String_Int(int o, String na) throws IOException {
+    public ArvoreB(int o, String na) throws IOException {
         
         // Inicializa os atributos da árvore
         ordem = o;

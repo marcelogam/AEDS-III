@@ -167,7 +167,7 @@ public class LeitorCSV {
         // Criacao do arquivo de banco de dados
         RandomAccessFile arq = new RandomAccessFile("./BancoDeDados/Filmes.db", "rw");
 
-        try (BufferedReader br = new BufferedReader(new FileReader("netflix_titles.csv"))) {
+        try (BufferedReader br = new BufferedReader(new FileReader("netflix_titlesTeste.csv"))) {
             br.readLine();
             while ((linha = br.readLine()) != null) {
                 filme[i] = tratarLinha(linha);
